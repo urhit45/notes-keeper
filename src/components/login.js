@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
 export default class Login extends Component{
     constructor() {
         super();
@@ -23,38 +26,26 @@ export default class Login extends Component{
     }
     render() {
         return(
-            <div>
-                <section className="colorlib-about">
-                    <div className="colorlib-narrow-content">
-                        <div className="row">
-                            <div className="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
-                                <span className="heading-meta">Login</span>
-                            </div>
-                        </div>
-                        <div className="row row-pt-md">
-                            <div className="animate-box">
-                                <Form>
-                                    <Form.Group controlId="formBasicEmail">
-                                        <Form.Label>Email address</Form.Label>
-                                        <Form.Control type="email" value={this.state.name} name="email" onChange={(event) =>this.handleUserInput(event)} placeholder="Enter email" />
-                                        <Form.Text className="text-muted">
-                                        We'll never share your email with anyone else.
-                                        </Form.Text>
-                                    </Form.Group>
+            <Container className="p-3">
+                <Jumbotron>
+                    <h3 className="header">Login</h3>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Form.Group controlId="LoginEmail">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control type="email" value={this.state.name} name="email" onChange={(event) =>this.handleUserInput(event)} placeholder="Enter email" />
+                        </Form.Group>
 
-                                    <Form.Group controlId="formBasicPassword">
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" value={this.state.name} name="password" onChange={(event) =>this.handleUserInput(event)} placeholder="Password" />
-                                    </Form.Group>
-                                    <Button variant="primary" type="submit">
-                                        Submit
-                                    </Button>
-                                </Form>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                        <Form.Group controlId="LoginPassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" value={this.state.name} name="password" onChange={(event) =>this.handleUserInput(event)} placeholder="Password" />
+                        </Form.Group>
+                        <Button disabled={!this.state.email || !this.state.password} variant="primary" type="submit">
+                            Submit
+                        </Button>
+                    </Form>
+                </Jumbotron>
+                                
+            </Container>
         )
     }
 }
