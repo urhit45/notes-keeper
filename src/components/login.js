@@ -1,45 +1,52 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
-export default class Login extends Component{
-    constructor() {
-        super();
-        this.state = {
-        email: null,
-        password: null,
-        formSuccess: false
-        }
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+import { useHistory } from 'react-router-dom';
 
-    handleUserInput(e) {
-        const name = e.target.name;
-        const value = e.target.value;
-        this.setState({ [name]: value });
-    }
-    
-    handleSubmit(e) {
+
+export default function Login(props){
+    let history = useHistory()
+    const [email, setEmail] = useState(null)
+    const [password, setPassword] = useState(null)
+
+    const handleSubmit = (e) => {
+        
         e.preventDefault();
-        console.log(this.state)
+        const body = {
+            "email": email,
+            "password": password
+        }
+        axios.post('https://d6l5hytbyg.execute-api.us-east-2.amazonaws.com/Dev/login',
+            body)
+            .then(response => {
+                if(response.data.message !== 'Failure'){                    
+                    history.push('/notes',{
+                            userId : response.data.userId,
+                            username: response.data.full_name
+                        }
+                    ) 
+                }
+            });
+        
     }
-    render() {
         return(
             <Container className="p-3">
                 <Jumbotron>
                     <h3 className="header">Login</h3>
-                    <Form onSubmit={this.handleSubmit}>
+                    <Form>
                         <Form.Group controlId="LoginEmail">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" value={this.state.name} name="email" onChange={(event) =>this.handleUserInput(event)} placeholder="Enter email" />
+                            <Form.Control type="email" name="email" onChange={e => setEmail(e.target.value)} placeholder="Enter email" />
                         </Form.Group>
 
                         <Form.Group controlId="LoginPassword">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" value={this.state.name} name="password" onChange={(event) =>this.handleUserInput(event)} placeholder="Password" />
+                            <Form.Control type="password" name="password" onChange={e => setPassword(e.target.value)} placeholder="Password" />
                         </Form.Group>
-                        <Button disabled={!this.state.email || !this.state.password} variant="primary" type="submit">
+                        <Button disabled={!email || !password} variant="primary" type="submit" onClick={handleSubmit}>
                             Submit
                         </Button>
                     </Form>
@@ -47,5 +54,4 @@ export default class Login extends Component{
                                 
             </Container>
         )
-    }
 }
